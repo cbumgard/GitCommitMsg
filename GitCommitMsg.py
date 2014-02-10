@@ -30,5 +30,5 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
     (out, error) = pr.communicate()
     print('Executing command: "%s"' % cmd)
     # Show the results in a new tab:
-    self.view.window().new_file()
-    sublime.active_window().active_view().insert(edit, 0, out.decode("utf-8"))
+    new_file = self.view.window().new_file()
+    new_file.insert(edit, 0, out.decode("utf-8"))
