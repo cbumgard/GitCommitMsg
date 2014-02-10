@@ -1,0 +1,5 @@
+  [
+      { 
+          "keys": ["alt+shift+m"], "command": "git_commit_msg"
+      }
+  ]
