@@ -12,6 +12,10 @@ Inspired by ["Every line of code is always documented"](http://mislav.uniqpath.c
  * Linux/Windows: Default keybinding is __Alt+Shift+m__
  * Assumes ```git``` is installed and in the ```$PATH```
 
+## Known Issues
+	
+ * __Not supported yet in Windows__: please see this [open issue](https://github.com/cbumgard/GitCommitMsg/issues/4)
+
 ## Install from Package Control
 
 The easiest way to install this is with [Package Control](http://wbond.net/sublime\_packages/package\_control).
