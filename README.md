@@ -19,3 +19,27 @@ The easiest way to install this is with [Package Control](http://wbond.net/subli
  * Bring up the Command Palette (Command+Shift+p on OS X, Control+Shift+p on Linux/Windows).
  * Select "Package Control: Install Package"
  * Select GitCommitMsg when the list appears.
+
+## Manual Install
+
+Use this if for some reason you cannot use Package Control steps above and/or the plugin does not appear yet in Package Control. Thanks to [https://github.com/kemayo/sublime-text-git/wiki](https://github.com/kemayo/sublime-text-git/wiki) for documenting these steps originally.
+
+First, you need to have `git` installed and in your `$PATH`. Afterwards you may need to restart Sublime Text 2 before the plugin will work.
+
+### OSX
+
+    $ cd ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
+    $ git clone git://github.com/cbumgard/GitCommitMsg.git GitCommitMsg
+
+### Linux (Ubuntu like distros)
+
+    $ cd ~/.config/sublime-text-2/Packages/
+    $ git clone git://github.com/cbumgard/GitCommitMsg.git GitCommitMsg
+
+### Windows 7:
+
+    Copy the directory to: "C:\Users\<username>\AppData\Roaming\Sublime Text 2\Packages"
+
+### Windows XP:
+
+    Copy the directory to: "C:\Documents and Settings\<username>\Application Data\Sublime Text 2\Packages"
