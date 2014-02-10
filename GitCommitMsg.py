@@ -7,11 +7,11 @@ import sys
 
 class GitCommitMsgCommand(sublime_plugin.TextCommand):
   """
-  Custom git_commit_msg plugin: 
+  Custom git_commit_msg plugin:
   Shows the git commit history for one or more lines of code.
   Default keybinding is cmd+shift+m (Mac) or alt+shift+m (Linux/Windows).
 
-  Inspired by "Every line of code is always documented" 
+  Inspired by "Every line of code is always documented"
   (http://mislav.uniqpath.com/2014/02/hidden-documentation/)
 
   Assumes git is installed and in the path.
