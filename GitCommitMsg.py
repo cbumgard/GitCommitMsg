@@ -32,3 +32,5 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
     # Show the results in a new tab:
     new_file = self.view.window().new_file()
     new_file.insert(edit, 0, out.decode("utf-8"))
+    new_file.set_scratch(True)
+    new_file.set_read_only(True)
