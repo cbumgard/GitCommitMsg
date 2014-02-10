@@ -1,5 +1,4 @@
 import sublime, sublime_plugin
-import commands
 import subprocess
 import os
 import sys
@@ -29,7 +28,7 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
     pr = subprocess.Popen(cmd, cwd = os.path.dirname(file_name), \
       shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     (out, error) = pr.communicate()
-    print 'Executing command: "%s"' % (cmd)
+    print('Executing command: "%s"' % cmd)
     # Show the results in a new tab:
     self.view.window().new_file()
-    sublime.active_window().active_view().insert(edit, 0, out)
+    sublime.active_window().active_view().insert(edit, 0, out.decode("utf-8"))
