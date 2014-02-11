@@ -3,7 +3,6 @@ import threading
 import subprocess
 import os
 import sys
-import re
 
 class GitCommitMsgThread(threading.Thread):
   def __init__(self, file_name, start_line, end_line):
