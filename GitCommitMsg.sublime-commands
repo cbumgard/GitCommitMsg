@@ -1,4 +1,4 @@
 [{
-    "caption": "GitCommitMsg: Show commit info for current line",
+    "caption": "GitCommitMsg: Show commit history for selected lines",
     "command": "git_commit_msg"
 }]
