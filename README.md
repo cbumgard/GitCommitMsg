@@ -1,4 +1,4 @@
-# Sublime Text 2 plugin: GitCommitMsg
+# Sublime Text plugin: GitCommitMsg
 
 Shows the git commit history for one or more lines of code.
 Essentially it performs a ```git blame``` on the selected line(s) of code,
@@ -8,6 +8,7 @@ Inspired by ["Every line of code is always documented"](http://mislav.uniqpath.c
 
 ## Usage
 
+ * Supports Sublime Text 2 & Sublime Text 3
  * Mac: Default keybinding is __Command+Shift+m__
  * Linux/Windows: Default keybinding is __Alt+Shift+m__
  * Assumes ```git``` is installed and in the ```$PATH```
@@ -15,10 +16,6 @@ Inspired by ["Every line of code is always documented"](http://mislav.uniqpath.c
 ## Example
 
 ![Screenshot](https://i.cloudup.com/UI1EZ841Zd.png)
-
-## Known Issues
-	
- * __Not supported yet in Windows__: please see this [open issue](https://github.com/cbumgard/GitCommitMsg/issues/4)
 
 ## Install from Package Control
 
