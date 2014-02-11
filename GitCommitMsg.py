@@ -22,8 +22,14 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
     start_line = self.view.rowcol(selected.begin())[0] + 1
     end_line = self.view.rowcol(selected.end())[0] + 1
     # Call 'git' commands in a subproc:
-    cmd = "git show --name-status $(git blame '%s' -L %d,%d | awk '{print $1}')" \
-      % (file_name, start_line, end_line) # use --quiet instead for no file stats
+    if sublime.platform() == 'windows':
+      cmd = 'echo off && for /f "tokens=1" %%a in ' \
+        '( \'"git blame "%s" -L %d,%d --root -s -l"\') do ' \
+        'git show --name-status "%%a"' \
+        % (file_name, start_line, end_line) # use --quiet instead for no file stats
+    else:
+      cmd = "git show --name-status $(git blame '%s' -L %d,%d | awk '{print $1}')" \
+        % (file_name, start_line, end_line) # use --quiet instead for no file stats
     # TODO: run in separate thread. It's quick but best not to block UI thread.
     pr = subprocess.Popen(cmd, cwd = os.path.dirname(file_name), \
       shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
