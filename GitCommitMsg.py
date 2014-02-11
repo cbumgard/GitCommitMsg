@@ -53,7 +53,6 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
       # Threaded job finished succesfully
       print("GitCommigMsg - Git result received succesfully")
       if len(thread.result) == 0:
-        print("empty")
         if start_line == end_line:
           result = "Current line is not committed yet."
         else:
