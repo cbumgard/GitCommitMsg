@@ -3,6 +3,7 @@ import threading
 import subprocess
 import os
 import sys
+import re
 
 class GitCommitMsgThread(threading.Thread):
   def __init__(self, file_name, start_line, end_line):
@@ -63,3 +64,10 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
       new_file.insert(edit, 0, result)
       new_file.set_scratch(True)
       new_file.set_read_only(True)
+
+      new_file.set_syntax_file("Packages/GitCommitMsg/GitCommitMsg.tmLanguage")
+
+      tab_title = os.path.basename(file_name) + " @" + str(start_line)
+      if start_line != end_line:
+        tab_title = tab_title + "," + str(end_line)
+      new_file.set_name(tab_title)
