@@ -1,0 +1,4 @@
+[{
+    "caption": "GitCommitMsg: Show commit info for current line",
+    "command": "git_commit_msg"
+}]
