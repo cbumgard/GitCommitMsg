@@ -1,8 +1,29 @@
 import sublime, sublime_plugin
+import threading
 import subprocess
 import os
 import sys
 
+class GitCommitMsgThread(threading.Thread):
+  def __init__(self, file_name, start_line, end_line):
+    threading.Thread.__init__(self)
+    if sublime.platform() == 'windows':
+      cmd = 'echo off && ' \
+        'for /f "tokens=1" %%a in ' \
+        '( \'"git blame "%s" -L %d,%d --root -s -l"\') do ' \
+        'git show --name-status "%%a"'
+    else:
+      cmd = "git show --name-status $(git blame '%s' -L %d,%d | " \
+        "awk '{print $1}')"
+    self.command = cmd % (file_name, start_line, end_line)
+    self.dir_name = os.path.dirname(file_name)
+
+  def run(self):
+    print('GitCommitMsg - Command: %s' % self.command)
+    pr = subprocess.Popen(self.command, cwd = self.dir_name, \
+      shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    (out, error) = pr.communicate()
+    self.result = out
 
 class GitCommitMsgCommand(sublime_plugin.TextCommand):
   """
@@ -17,26 +38,29 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
   """
   def run(self, edit):
     file_name = self.view.file_name()
-    dir_name = os.path.dirname(file_name)
     selected = self.view.sel()[0];
     start_line = self.view.rowcol(selected.begin())[0] + 1
     end_line = self.view.rowcol(selected.end())[0] + 1
-    # Call 'git' commands in a subproc:
-    if sublime.platform() == 'windows':
-      cmd = 'echo off && for /f "tokens=1" %%a in ' \
-        '( \'"git blame "%s" -L %d,%d --root -s -l"\') do ' \
-        'git show --name-status "%%a"' \
-        % (file_name, start_line, end_line) # use --quiet instead for no file stats
+
+    thread = GitCommitMsgThread(file_name, start_line, end_line)
+    thread.start()
+    thread.join(5.0) # Timeout in sec
+
+    if thread.isAlive():
+      # Thread timed out
+      print("GitCommigMsg - Git thread stalled")
     else:
-      cmd = "git show --name-status $(git blame '%s' -L %d,%d | awk '{print $1}')" \
-        % (file_name, start_line, end_line) # use --quiet instead for no file stats
-    # TODO: run in separate thread. It's quick but best not to block UI thread.
-    pr = subprocess.Popen(cmd, cwd = os.path.dirname(file_name), \
-      shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    (out, error) = pr.communicate()
-    print('Executing command: "%s"' % cmd)
-    # Show the results in a new tab:
-    new_file = self.view.window().new_file()
-    new_file.insert(edit, 0, out.decode("utf-8"))
-    new_file.set_scratch(True)
-    new_file.set_read_only(True)
+      # Threaded job finished succesfully
+      print("GitCommigMsg - Git result received succesfully")
+      if len(thread.result) == 0:
+        print("empty")
+        if start_line == end_line:
+          result = "Current line is not committed yet."
+        else:
+          result = "Selected lines are not committed yet."
+      else:
+        result = thread.result.decode("utf-8")
+      new_file = self.view.window().new_file()
+      new_file.insert(edit, 0, result)
+      new_file.set_scratch(True)
+      new_file.set_read_only(True)
