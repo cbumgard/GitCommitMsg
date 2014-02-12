@@ -15,7 +15,7 @@ Inspired by ["Every line of code is always documented"](http://mislav.uniqpath.c
 
 ## Example
 
-![Screenshot](https://i.cloudup.com/UI1EZ841Zd.png)
+![Screenshot](https://i.cloudup.com/XCe4PUruhA.png)
 
 ## Install from Package Control
 
