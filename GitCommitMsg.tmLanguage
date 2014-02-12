@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array/>
+	<key>name</key>
+	<string>GitCommitMsg</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^(commit)\s+(.*)$</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\w+:\s+.*$</string>
+			<key>name</key>
+			<string>comment</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s+.*$</string>
+			<key>name</key>
+			<string>entity.name.class</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^[AMCU]\s+</string>
+			<key>name</key>
+			<string>markup.inserted.diff</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^[DR]\s+</string>
+			<key>name</key>
+			<string>markup.deleted.diff</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.gitcommitmsg</string>
+	<key>uuid</key>
+	<string>400a17b2-3ccd-4114-a7d1-f7f8acfa3344</string>
+</dict>
+</plist>

@@ -1,0 +1,25 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: GitCommitMsg
+scopeName: source.gitcommitmsg
+fileTypes: []
+uuid: 400a17b2-3ccd-4114-a7d1-f7f8acfa3344
+
+patterns:
+- match: ^(commit)\s+(.*)$
+  captures:
+    '1': {name: keyword}
+    '2': {name: entity.name.function}
+
+- name: comment
+  match: ^\w+:\s+.*$
+
+- name: entity.name.class
+  match: ^\s+.*$
+
+- name: markup.inserted.diff
+  match: ^[AMCU]\s+
+
+- name: markup.deleted.diff
+  match: ^[DR]\s+
+...
