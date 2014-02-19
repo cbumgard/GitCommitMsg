@@ -20,8 +20,12 @@ class GitCommitMsgThread(threading.Thread):
 
   def run(self):
     print('GitCommitMsg - Command: %s' % self.command)
-    pr = subprocess.Popen(self.command, cwd = self.dir_name, \
-      shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    pr = subprocess.Popen(self.command,
+      cwd = self.dir_name,
+      shell = True,
+      stdout = subprocess.PIPE,
+      stderr = subprocess.PIPE,
+      stdin = subprocess.PIPE)
     (out, error) = pr.communicate()
     self.result = out
 
