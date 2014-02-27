@@ -8,7 +8,7 @@ class GitCommitMsgThread(threading.Thread):
   def __init__(self, view):
     threading.Thread.__init__(self)
     self.view = view
-    selected = view.sel()[0];
+    selected = view.sel()[0]
     self.file_name = view.file_name()
     self.start_line = view.rowcol(selected.begin())[0] + 1
     self.end_line = view.rowcol(selected.end())[0] + 1
