@@ -4,56 +4,58 @@ import subprocess
 import os
 import sys
 
-def gitCommitMessageExecute(view):
-  selected = view.sel()[0];
-  file_name = view.file_name()
-  start_line = view.rowcol(selected.begin())[0] + 1
-  end_line = view.rowcol(selected.end())[0] + 1
-  dir_name = os.path.dirname(file_name)
-  if sublime.platform() == 'windows':
-    command = 'echo off && ' \
-      'for /f "tokens=1" %%a in ' \
-      '( \'"git blame "%s" -L %d,%d --root -s -l"\') do ' \
-      'git show --name-status "%%a"'
-  else:
-    command = "git show --name-status " \
-      "$(git blame '%s' -L %d,%d | " \
-      "awk '{print $1}')"
-  command = command % (file_name, start_line, end_line)
-  sublime.status_message("Getting commit info from Git repository ...")
-  pr = subprocess.Popen(command,
-    cwd = dir_name,
-    shell = True,
-    stdout = subprocess.PIPE,
-    stderr = subprocess.PIPE,
-    stdin = subprocess.PIPE)
-  (result, error) = pr.communicate()
-  if len(result) == 0:
-    if start_line == end_line:
-      result = "Current line is not committed yet."
-    else:
-      result = "Selected lines are not committed yet."
-  else:
-    result = result.decode("utf-8")
-  # Separate different commits with an empty line
-  if sublime.platform() == 'windows':
-    result = result.replace("\ncommit", "\n\ncommit")
-  args = {
-    "file_name": file_name,
-    "start_line": start_line,
-    "end_line": end_line,
-    "result": result
-  }
-  view.run_command("git_commit_msg_result", args);
-
-
 class GitCommitMsgThread(threading.Thread):
   def __init__(self, view):
     threading.Thread.__init__(self)
     self.view = view
+    selected = view.sel()[0];
+    self.file_name = view.file_name()
+    self.start_line = view.rowcol(selected.begin())[0] + 1
+    self.end_line = view.rowcol(selected.end())[0] + 1
+    if sublime.platform() == 'windows':
+      cmd = 'echo off && ' \
+        'for /f "tokens=1" %%a in ' \
+        '( \'"git blame "%s" -L %d,%d --root -s -l"\') do ' \
+        'git show --name-status "%%a"'
+    else:
+      cmd = "git show --name-status " \
+        "$(git blame '%s' -L %d,%d | " \
+        "awk '{print $1}')"
+    self.command = cmd % (self.file_name, self.start_line, self.end_line)
+    self.dir_name = os.path.dirname(self.file_name)
 
   def run(self):
-    gitCommitMessageExecute(self.view)
+    sublime.set_timeout(
+      lambda: sublime.status_message("Getting commit info from Git repository ..."),
+      100)
+    pr = subprocess.Popen(self.command,
+      cwd = self.dir_name,
+      shell = True,
+      stdout = subprocess.PIPE,
+      stderr = subprocess.PIPE,
+      stdin = subprocess.PIPE)
+    (result, error) = pr.communicate()
+    if len(result) == 0:
+      if self.start_line == self.end_line:
+        result = "Current line is not committed yet."
+      else:
+        result = "Selected lines are not committed yet."
+    else:
+      result = result.decode("utf-8")
+
+    # Separate different commits with an empty line
+    if sublime.platform() == 'windows':
+      result = result.replace("\ncommit", "\n\ncommit")
+
+    args = {
+      "file_name": self.file_name,
+      "start_line": self.start_line,
+      "end_line": self.end_line,
+      "result": result
+    }
+    sublime.set_timeout(
+      lambda: self.view.run_command("git_commit_msg_result", args),
+      100)
 
 class GitCommitMsgResultCommand(sublime_plugin.TextCommand):
   """
@@ -102,10 +104,6 @@ class GitCommitMsgCommand(sublime_plugin.TextCommand):
   blocking the UI.
   """
   def run(self, edit):
-    if sys.version_info[0] >= 3:
-      thread = GitCommitMsgThread(self.view)
-      thread.start()
-    else:
-      gitCommitMessageExecute(self.view)
-
+    thread = GitCommitMsgThread(self.view)
+    thread.start()
 
