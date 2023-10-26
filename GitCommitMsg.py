@@ -73,7 +73,7 @@ class GitCommitMsgResultCommand(sublime_plugin.TextCommand):
   """
   def run(self, edit, file_name, start_line, end_line, result):
     new_file = self.view.window().new_file()
-    new_file.insert(edit, 0, result)
+    new_file.run_command("append", {"characters": result})
     new_file.set_scratch(True)
     new_file.set_read_only(True)
     syntax = "Packages/GitCommitMsg/GitCommitMsg.tmLanguage"
